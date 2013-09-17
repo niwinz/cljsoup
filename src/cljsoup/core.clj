@@ -1,104 +1,93 @@
 (ns cljsoup.core
-  (:import (org.jsoup Jsoup)
-           (org.jsoup.parser Parser))
-  (:gen-class))
+  (:import (org.jsoup Jsoup)))
 
-(defrecord SoupElement [internal-instance])
-(defrecord SoupDocument [internal-instance])
+;; Private util methods
 
+(defn- make-type [doc-type instance]
+    {:inner instance :type doc-type})
 
-(defn is-document?
-  "Test if a first argument is a document"
-  [^SoupDocument element]
-  (instance? SoupDocument element))
+(defn- make-document [instance]
+  (make-type :document instance))
 
+(defn- make-element [instance]
+  (make-type :element instance))
 
-(defn is-element?
-  "Test if a first argument is a element or
-  document."
+(defn- is-type? [doc-type type-instance]
+    (= (:type type-instance) doc-type))
 
-  ([element strict]
-    (if (not strict)
-      (or
-        (instance? SoupElement element)
-        (instance? SoupDocument element))
-      (instance? SoupElement element)))
+(defn- inner-instance-of [elm]
+    (:inner elm))
 
-  ([element]
-    (is-element? element false)))
+(defn- type-of [elm]
+    (:type elm))
 
+;; Public api
+
+;; FIXME: update metadata for add docstring
+;; for each method
+(def is-document? (partial is-type? :document))
+(def is-element? (partial is-type? :element))
 
 (defn from-string
   "Parse string and creates a new Document element."
   [^String data]
-  (let [parsed-data (Jsoup/parse data)]
-    (SoupDocument. parsed-data)))
-
+  (let [doc (Jsoup/parse data)
+        instance (make-document doc)]
+    instance))
 
 (defn body
   "Returns a body of document"
-  [^SoupDocument elm]
-  {:pre [(is-document? elm)]
-   :post [(is-element? %)]}
-  (let [instance (:internal-instance elm)
-        element  (SoupElement. (.body instance))]
-    element))
-
+  [elm]
+  {:pre [(is-document? elm)]}
+  (let [element (inner-instance-of elm)
+        instance (make-element (.body element))]
+    instance))
 
 (defn head
   "Returns a head of document"
-  [^SoupDocument elm]
-  {:pre [(is-document? elm)]
-   :post [(is-element? %)]}
-  (let [instance (:internal-instance elm)
-        element  (SoupElement. (.head instance))]
-    element))
-
+  [elm]
+  {:pre [(is-document? elm)]}
+  (let [element (inner-instance-of elm)
+        instance (make-element element)]
+    instance))
 
 (defn clone
   "Clone a document or element"
-  [^SoupElement elm]
-  {:pre [(is-element? elm)]
-   :post [(is-element? %)]}
-  (let [instance (:internal-instance elm)
-        cloned   (SoupElement. (.clone instance))]
-    cloned))
-
+  [elm]
+  {:pre [(is-element? elm)]}
+  (let [element (inner-instance-of elm)
+        cloned  (.clone element)]
+    (if (is-element? elm)
+      (make-element cloned)
+      (make-document cloned))))
 
 (defn title
   "Get document title"
-  [^SoupDocument elm]
+  [elm]
   {:pre [(is-document? elm)]}
-  (-> elm :internal-instance .title))
-
+  (.title (inner-instance-of elm)))
 
 (defn set-title!
   "Set document title"
-  [^SoupDocument elm, ^String title]
+  [elm, ^String title]
   {:pre [(is-document? elm)
          (instance? String title)]}
-  (.title (:internal-instance elm) title))
-
+  (.title (inner-instance-of elm) title))
 
 (defn inner-html
   "Get inner html of element instance."
-  [^SoupElement elm]
+  [elm]
   {:pre [(is-element? elm)]}
-  (-> elm :internal-instance .html))
-
+  (.html (inner-instance-of elm)))
 
 (defn outer-html
   "Get inner html of element instance."
-  [^SoupElement elm]
+  [elm]
   {:pre [(is-element? elm)]}
-  (-> elm :internal-instance .outerHtml))
-
+  (.outerHtml (inner-instance-of elm)))
 
 ;; (defn select
 ;;   "Make jquery like search over dom"
 ;;   {:pre [(is-document? elm)
 ;;          (instance? String title)]}
-;;   [^SoupElement elm, ^String query]
-
-
-
+;;   [^Element elm, ^String query]
