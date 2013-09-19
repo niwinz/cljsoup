@@ -54,7 +54,7 @@
 (defn clone
   "Clone a document or element"
   [elm]
-  {:pre [(is-element? elm)]}
+  {:pre [(or (is-element? elm) (is-document? elm))]}
   (let [element (inner-instance-of elm)
         cloned  (.clone element)]
     (if (is-element? elm)
