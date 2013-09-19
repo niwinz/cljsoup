@@ -48,7 +48,7 @@
   [elm]
   {:pre [(is-document? elm)]}
   (let [element (inner-instance-of elm)
-        instance (make-element element)]
+        instance (make-element (.head element))]
     instance))
 
 (defn clone
