@@ -5,4 +5,5 @@
             :url "http://opensource.org/licenses/BSD-3-Clause"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.jsoup/jsoup "1.7.2"]]
-  :aot [cljsoup.core])
+  :aot [cljsoup.core]
+  :plugins [[lein-marginalia "0.7.1"]])
