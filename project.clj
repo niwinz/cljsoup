@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.jsoup/jsoup "1.7.2"]]
   :aot [cljsoup.core]
-  :plugins [[lein-marginalia "0.7.1"]])
+  :plugins [[lein-marginalia "0.7.1"]
+            [codox "0.6.6"]])
