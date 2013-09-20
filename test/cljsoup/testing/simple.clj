@@ -46,6 +46,12 @@
       (is (= _first_element "<body>"))))
 
   (testing "Clone document"
-      (let [doc     (from-string html-data)
-            cloned  (clone doc)]
-        (is (not (identical? doc cloned))))))
+    (let [doc     (from-string html-data)
+          cloned  (clone doc)]
+      (is (not (identical? doc cloned)))))
+
+  (testing "Convert to vector and use select"
+    (let [doc   (from-string html-data)
+          items  (select doc "span")]
+      (is (is-collection? items))
+      (is (= (count (as-vector items)) 2)))))

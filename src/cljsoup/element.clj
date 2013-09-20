@@ -41,5 +41,10 @@
   "Get collection as clojure vector of elements"
   [elm]
   {:pre [(is-collection? elm)]}
-  (let [instance (inner-instance-of elm)]
-    (vec (map #(.get instance %1) (range (.size instance))))))
+  (let [instance (inner-instance-of elm)
+        result (atom [])]
+    (dotimes [n (.size instance)]
+      (let [item (.get instance n)]
+        (println item)
+        (swap! result conj item)))
+    (vec (map make-element @result))))
