@@ -1,4 +1,5 @@
 (ns cljsoup.testing.simple
+  (:refer-clojure :exclude [first])
   (:require [clojure.test :refer :all]
             [cljsoup.core :refer :all]
             [cljsoup.util :refer :all]
@@ -9,7 +10,9 @@
 (def html-data "<head><title>simple title</title><head>
                 <body><div><span>Hello</span><span>World</span></div></body>")
 
-(deftest a-test
+(def html-data-02 "<div id=\"foo\" data-foo=\"bar\">Hello World</div>")
+
+(deftest basic-tests
   (testing "Testing from-string and conditionals"
     (let [doc (from-string html-data)]
       (is (is-document? doc))
@@ -20,14 +23,14 @@
           _body       (body _doc)
           _body_html  (s/split (inner-html _body) #"\n")]
       (is (is-element? _body))
-      (is (= (first _body_html) "<div>"))))
+      (is (= (clojure.core/first _body_html) "<div>"))))
 
   (testing "Testing head"
     (let [_doc        (from-string html-data)
           _head       (head _doc)
           _head_html  (s/split (inner-html _head) #"\n")]
       (is (is-element? _head))
-      (is (= (first _head_html) "<title>simple title</title>"))))
+      (is (= (clojure.core/first _head_html) "<title>simple title</title>"))))
 
   (testing "Test get title"
     (let [_doc    (from-string html-data)]
@@ -42,7 +45,7 @@
     (let [_doc            (from-string html-data)
           _body           (body _doc)
           _html           (outer-html _body)
-          _first_element  (first (s/split _html #"\n"))]
+          _first_element  (clojure.core/first (s/split _html #"\n"))]
       (is (= _first_element "<body>"))))
 
   (testing "Clone document"
@@ -54,4 +57,9 @@
     (let [doc   (from-string html-data)
           items  (select doc "span")]
       (is (is-collection? items))
-      (is (= (count (as-vector items)) 2)))))
+      (is (= (count (as-vector items)) 2))))
+
+  (testing "Access to attributes"
+    (let [doc   (from-string html-data-02)
+          attrs (attributes (get-element-by-id doc "foo"))]
+      (is (= attrs {:id "foo" :data-foo "bar"})))))

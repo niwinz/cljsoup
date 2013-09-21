@@ -1,5 +1,6 @@
 (ns cljsoup.element
-  (:use cljsoup.util))
+  (:use cljsoup.util)
+  (:refer-clojure :exclude [first]))
 
 (defn clone
   "Clone a document or element"
@@ -46,10 +47,23 @@
 
 (defn get-element-by-id
   "Get element by id from current element."
+  [elm, ^String id]
+  {:pre [(or (is-document? elm) (is-element? elm))]}
+  (let [element  (.getElementById (inner-instance-of elm) id)]
+    (make-element element)))
+
+(defn get-elements-by-class
+  "Get elements by class name from current element."
+  [elm, ^String clsname]
+  {:pre [(or (is-document? elm) (is-element? elm))]}
+  (let [element  (.getElementsByClass (inner-instance-of elm) clsname)]
+    (make-collection element)))
+
+(defn has-text?
+  "Test if current element has any text node and not whitespace."
   [elm]
   {:pre [(or (is-document? elm) (is-element? elm))]}
-  (let [element  (.getElementById (inner-instance-of elm))]
-    (make-element element)))
+  (.hasText (inner-instance-of elm)))
 
 (defn size
   "Get elements collection size"
@@ -67,3 +81,24 @@
       (let [item (.get instance n)]
         (swap! result conj item)))
     (vec (map make-element @result))))
+
+(defn attributes
+  "Get attributes map from current element."
+  [elm]
+  {:pre [(or (is-document? elm) (is-element? elm))]}
+  (let [inner       (inner-instance-of elm)
+        inner-attrs (-> inner .attributes .asList)
+        num-attrs   (-> inner .attributes .size)
+        final-attrs (atom {})]
+    (dotimes [n num-attrs]
+      (let [attribute (.get inner-attrs n)
+            attrname  (.getKey attribute)
+            attrvalue (.getValue attribute)]
+        (swap! final-attrs assoc (keyword attrname) attrvalue)))
+    @final-attrs))
+
+(defn first
+  "Get a first element from one collection."
+  [elm]
+  {:pre [(is-collection? elm)]}
+  (make-collection (.first (inner-instance-of elm))))
