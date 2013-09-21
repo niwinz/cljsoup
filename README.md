@@ -31,9 +31,9 @@ make a pull-request."
 
 ```clojure
 (require '[cljsoup.element :as el])
-(def elm (el/first (select document "title")))
+(def elm (el/first (el/select document "title")))
 (println (el/outer-html elm))
-;; -> "Hello World"
+;; -> "<title>Hello World</title>"
 ```
 
 ## Api Documentation
