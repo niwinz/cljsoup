@@ -1,5 +1,6 @@
 (defproject be.niwi/cljsoup "0.1.0"
-  :description "Clojure html parser based on jsoup."
+  :description "Clojure html/xml parser based on jsoup."
+
   :url "http://github.com/niwibe/cljsoup"
   :license {:name "BSD"
             :url "http://opensource.org/licenses/BSD-3-Clause"}
