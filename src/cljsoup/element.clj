@@ -31,6 +31,26 @@
   (let [instance (inner-instance-of elm)]
     (make-collection (.select instance query))))
 
+(defn children
+  "Get element children elements."
+  [elm]
+  {:pre [(or (is-document? elm) (is-element? elm))]}
+  (let [childs (.children (inner-instance-of elm))]
+    (make-collection childs)))
+
+(defn class-name
+  "Get class name from current element."
+  [elm]
+  {:pre [(or (is-document? elm) (is-element? elm))]}
+  (.className (inner-instance-of elm)))
+
+(defn get-element-by-id
+  "Get element by id from current element."
+  [elm]
+  {:pre [(or (is-document? elm) (is-element? elm))]}
+  (let [element  (.getElementById (inner-instance-of elm))]
+    (make-element element)))
+
 (defn size
   "Get elements collection size"
   [elm]
