@@ -14,11 +14,27 @@ make a pull-request."
 ### Parse document
 
 ```clojure
-user=> (require '[cljsoup.core :as cr]
-                '[cljsoup.document :as dc])
-user=> (def document (cr/from-string "<head><title>Hello World</title></head>"))
+(require '[cljsoup.core :as cr]
+         '[cljsoup.document :as dc])
+(def document (cr/from-string "<head><title>Hello World</title></head>"))
 ```
 
+### Get/Set Title
+
+```clojure
+(dc/set-title! document "Foo Bar")
+(println (dc/title document))
+;; -> "Foo Bar"
+```
+
+### Traversing dom
+
+```clojure
+(require '[cljsoup.element :as el])
+(def elm (el/first (select document "title")))
+(println (el/outer-html elm))
+;; -> "Hello World"
+```
 
 ## Api Documentation
 
