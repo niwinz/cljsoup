@@ -65,6 +65,5 @@
         result (atom [])]
     (dotimes [n (.size instance)]
       (let [item (.get instance n)]
-        (println item)
         (swap! result conj item)))
     (vec (map make-element @result))))
