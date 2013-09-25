@@ -22,10 +22,3 @@
   [elm]
   {:pre [(is-document? elm)]}
   (.title (inner-instance-of elm)))
-
-(defn set-title!
-  "Set document title"
-  [elm, ^String title]
-  {:pre [(is-document? elm)
-         (instance? String title)]}
-  (.title (inner-instance-of elm) title))

@@ -36,10 +36,10 @@
     (let [_doc    (from-string html-data)]
       (is (= (title _doc) "simple title"))))
 
-  (testing "Set title"
-    (let [_doc (from-string html-data)]
-      (set-title! _doc "foo-title")
-      (is (= (title _doc) "foo-title"))))
+  ;; (testing "Set title"
+  ;;   (let [_doc (from-string html-data)]
+  ;;     (set-title! _doc "foo-title")
+  ;;     (is (= (title _doc) "foo-title"))))
 
   (testing "Outer html"
     (let [_doc            (from-string html-data)
