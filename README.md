@@ -3,9 +3,10 @@
 Clojure html/xml parser based on jsoup.
 
 This is a small library tha wraps a well java library for parsing html
-into a clojure idiomatic api.
+into a clojure idiomatic api. Cljsoup only exposes a parser api and it
+does not have intentions to expose a mutanle api.
 
-Currently it does not support all api that jsoup support out the box. But,
+NOTE: Currently it does not support all api that jsoup support out the box. But,
 if you need some method that is not implemented in cljsoup, let me know or
 make a pull-request."
 
@@ -19,12 +20,11 @@ make a pull-request."
 (def document (cr/from-string "<head><title>Hello World</title></head>"))
 ```
 
-### Get/Set Title
+### Get Title
 
 ```clojure
-(dc/set-title! document "Foo Bar")
 (println (dc/title document))
-;; -> "Foo Bar"
+;; -> "Hello World"
 ```
 
 ### Traversing dom
@@ -38,7 +38,14 @@ make a pull-request."
 
 ## Api Documentation
 
-FIXME
+Currently api documentation is not available online, but you can build it manually:
+
+```
+git clone https://github.com/niwibe/cljsoup
+cd cljsoup
+lein doc
+chromium doc/index.html
+```
 
 ## License
 
