@@ -62,4 +62,9 @@
   (testing "Access to attributes"
     (let [doc   (from-string html-data-02)
           attrs (attributes (get-element-by-id doc "foo"))]
-      (is (= attrs {:id "foo" :data-foo "bar"})))))
+      (is (= attrs {:id "foo" :data-foo "bar"}))))
+
+  (testing "has text?"
+    (let [doc   (from-string html-data-02)
+          elm   (select doc "#foo")]
+      (is (has-text? elm)))))

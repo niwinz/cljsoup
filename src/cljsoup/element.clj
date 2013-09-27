@@ -62,7 +62,10 @@
 (defn has-text?
   "Test if current element has any text node and not whitespace."
   [elm]
-  {:pre [(or (is-document? elm) (is-element? elm))]}
+  {:pre [(or
+           (is-document? elm)
+           (is-element? elm)
+           (is-collection? elm))]}
   (.hasText (inner-instance-of elm)))
 
 (defn size
