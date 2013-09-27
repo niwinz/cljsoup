@@ -1,5 +1,6 @@
 (ns cljsoup.testing.simple
   (:refer-clojure :exclude [first])
+  (:import (org.jsoup.parser Parser))
   (:require [clojure.test :refer :all]
             [cljsoup.core :refer :all]
             [cljsoup.util :refer :all]
@@ -12,12 +13,18 @@
 
 (def html-data-02 "<div id=\"foo\" data-foo=\"bar\">Hello World</div>")
 
-(deftest basic-tests
+(deftest entry-point-tests
   (testing "Testing from-string and conditionals"
     (let [doc (from-string html-data)]
       (is (is-document? doc))
       (is (not (is-element? doc)))))
 
+  (testing "Testing from-string with custom parser"
+    (let [parser  (Parser/htmlParser)
+          doc     (from-string html-data parser)]
+      (is (is-document? doc)))))
+
+(deftest document-tests
   (testing "Testing body"
     (let [_doc        (from-string html-data)
           _body       (body _doc)
@@ -34,13 +41,15 @@
 
   (testing "Test get title"
     (let [_doc    (from-string html-data)]
-      (is (= (title _doc) "simple title"))))
+      (is (= (title _doc) "simple title")))))
 
   ;; (testing "Set title"
   ;;   (let [_doc (from-string html-data)]
   ;;     (set-title! _doc "foo-title")
   ;;     (is (= (title _doc) "foo-title"))))
+  ;;
 
+(deftest elements-tests
   (testing "Outer html"
     (let [_doc            (from-string html-data)
           _body           (body _doc)
