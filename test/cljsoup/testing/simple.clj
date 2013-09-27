@@ -4,8 +4,7 @@
   (:require [clojure.test :refer :all]
             [cljsoup.core :refer :all]
             [cljsoup.util :refer :all]
-            [cljsoup.document :refer :all]
-            [cljsoup.element :refer :all]
+            [cljsoup.nodes :refer :all]
             [clojure.string :as s]))
 
 (def html-data "<head><title>simple title</title><head>
