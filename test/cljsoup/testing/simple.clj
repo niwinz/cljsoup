@@ -1,10 +1,12 @@
 (ns cljsoup.testing.simple
   (:refer-clojure :exclude [first])
-  (:import (org.jsoup.parser Parser))
+  (:import (org.jsoup.parser Parser)
+           (org.jsoup.safety Whitelist))
   (:require [clojure.test :refer :all]
             [cljsoup.core :refer :all]
             [cljsoup.util :refer :all]
             [cljsoup.nodes :refer :all]
+            [cljsoup.safety :refer :all]
             [clojure.string :as s]))
 
 (def html-data "<head><title>simple title</title><head>
@@ -42,12 +44,6 @@
     (let [_doc    (from-string html-data)]
       (is (= (title _doc) "simple title")))))
 
-  ;; (testing "Set title"
-  ;;   (let [_doc (from-string html-data)]
-  ;;     (set-title! _doc "foo-title")
-  ;;     (is (= (title _doc) "foo-title"))))
-  ;;
-
 (deftest elements-tests
   (testing "Outer html"
     (let [_doc            (from-string html-data)
@@ -76,3 +72,22 @@
     (let [doc   (from-string html-data-02)
           elm   (select doc "#foo")]
       (is (has-text? elm)))))
+
+
+(deftest safety-tests
+  (testing "whitelists"
+    (let [wl1 (basic-whitelist)
+          wl2 (relaxed-whitelist)
+          wl3 (simpletext-whitelist)]
+      (is (class wl1) Whitelist)
+      (is (class wl2) Whitelist)
+      (is (class wl3) Whitelist)))
+  (testing "cleaning text"
+    (let [html      "<div><b>hello world</b></div>"
+          doc       (from-string html)
+          whlist    (simpletext-whitelist)
+          valid     (is-valid? doc whlist)
+          cleandoc  (clean doc whlist)]
+      (is (false? valid))
+      (is (= (inner-html cleandoc) (str "<html>\n <head></head>\n <body>\n  "
+                                        "<b>hello world</b>\n </body>\n</html>"))))))
