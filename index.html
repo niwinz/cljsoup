@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Cljsoup by niwibe</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/niwibe/cljsoup">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/niwibe/cljsoup/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/niwibe/cljsoup/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Cljsoup</h1>
+          <p>A clojure library for parse HTML (clojure idiomatic wrapper of jsoup)</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/niwibe">niwibe</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="cljsoup" class="anchor" href="#cljsoup"><span class="octicon octicon-link"></span></a>cljsoup</h1>
+
+<p>Clojure html/xml parser based on jsoup.</p>
+
+<p>This is a small library tha wraps a well java library for parsing html
+into a clojure idiomatic api. Cljsoup only exposes a parser api and it
+does not have intentions to expose a mutanle api.</p>
+
+<p>NOTE: Currently it does not support all api that jsoup support out the box. But,
+if you need some method that is not implemented in cljsoup, let me know or
+make a pull-request."</p>
+
+<h2>
+<a name="user-guide" class="anchor" href="#user-guide"><span class="octicon octicon-link"></span></a>User Guide</h2>
+
+<h3>
+<a name="parse-document" class="anchor" href="#parse-document"><span class="octicon octicon-link"></span></a>Parse document</h3>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">require</span> <span class="o">'</span><span class="p">[</span><span class="nv">cljsoup.core</span> <span class="ss">:as</span> <span class="nv">cr</span><span class="p">]</span>
+         <span class="o">'</span><span class="p">[</span><span class="nv">cljsoup.document</span> <span class="ss">:as</span> <span class="nv">dc</span><span class="p">])</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">document</span> <span class="p">(</span><span class="nf">cr/from-string</span> <span class="s">"&lt;head&gt;&lt;title&gt;Hello World&lt;/title&gt;&lt;/head&gt;"</span><span class="p">))</span>
+</pre></div>
+
+<h3>
+<a name="get-title" class="anchor" href="#get-title"><span class="octicon octicon-link"></span></a>Get Title</h3>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">dc/title</span> <span class="nv">document</span><span class="p">))</span>
+<span class="c1">;; -&gt; "Hello World"</span>
+</pre></div>
+
+<h3>
+<a name="traversing-dom" class="anchor" href="#traversing-dom"><span class="octicon octicon-link"></span></a>Traversing dom</h3>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">require</span> <span class="o">'</span><span class="p">[</span><span class="nv">cljsoup.element</span> <span class="ss">:as</span> <span class="nv">el</span><span class="p">])</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">elm</span> <span class="p">(</span><span class="nf">el/first</span> <span class="p">(</span><span class="nf">el/select</span> <span class="nv">document</span> <span class="s">"title"</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">el/outer-html</span> <span class="nv">elm</span><span class="p">))</span>
+<span class="c1">;; -&gt; "&lt;title&gt;Hello World&lt;/title&gt;"</span>
+</pre></div>
+
+<h2>
+<a name="api-documentation" class="anchor" href="#api-documentation"><span class="octicon octicon-link"></span></a>Api Documentation</h2>
+
+<p>Currently api documentation is not available online, but you can build it manually:</p>
+
+<pre><code>git clone https://github.com/niwibe/cljsoup
+cd cljsoup
+lein doc
+chromium doc/index.html
+</code></pre>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright © 2013 Andrey Antukh</p>
+
+<p>Distributed under the Apache 2.0 License.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
