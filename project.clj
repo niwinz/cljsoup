@@ -9,8 +9,8 @@
 
   :aot [cljsoup.core
         cljsoup.util
-        cljsoup.document
-        cljsoup.element]
+        cljsoup.nodes
+        cljsoup.safety]
 
   :plugins [[lein-marginalia "0.7.1"]
             [codox "0.6.6"]])
