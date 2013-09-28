@@ -1,30 +1,29 @@
 (ns cljsoup.nodes
   (:use cljsoup.util)
-  (:refer-clojure :exclude [first]))
+  (:refer-clojure :exclude [first])
+  (:import (org.jsoup.parser Parser)
+           (org.jsoup.nodes Element Document)
+           (org.jsoup.select Elements)))
 
 ;; Document Api
 
 (defn body
   "Returns a body of document"
-  [elm]
+  [^Document elm]
   {:pre [(is-document? elm)]}
-  (let [element (inner-instance-of elm)
-        instance (make-element (.body element))]
-    instance))
+  (.body elm))
 
 (defn head
   "Returns a head of document"
-  [elm]
+  [^Document elm]
   {:pre [(is-document? elm)]}
-  (let [element (inner-instance-of elm)
-        instance (make-element (.head element))]
-    instance))
+  (.head elm))
 
 (defn title
   "Get document title"
-  [elm]
+  [^Document elm]
   {:pre [(is-document? elm)]}
-  (.title (inner-instance-of elm)))
+  (.title elm))
 
 ;; Element api
 
@@ -32,58 +31,50 @@
   "Clone a document or element"
   [elm]
   {:pre [(or (is-element? elm) (is-document? elm))]}
-  (let [element (inner-instance-of elm)
-        cloned  (.clone element)]
-    (if (is-element? elm)
-      (make-element cloned)
-      (make-document cloned))))
+  (.clone elm))
 
 (defn inner-html
   "Get inner html of element instance."
   [elm]
   {:pre [(is-element? elm)]}
-  (.html (inner-instance-of elm)))
+  (.html elm))
 
 (defn outer-html
   "Get inner html of element instance."
   [elm]
   {:pre [(is-element? elm)]}
-  (.outerHtml (inner-instance-of elm)))
+  (.outerHtml elm))
 
 (defn select
   "Make jquery like search over dom"
   [elm, ^String query]
   {:pre [(or (is-document? elm) (is-element? elm))
          (instance? String query)]}
-  (let [instance (inner-instance-of elm)]
-    (make-collection (.select instance query))))
+  (.select elm query))
 
 (defn children
   "Get element children elements."
   [elm]
   {:pre [(or (is-document? elm) (is-element? elm))]}
-  (let [childs (.children (inner-instance-of elm))]
-    (make-collection childs)))
+  (.children elm))
 
 (defn class-name
   "Get class name from current element."
   [elm]
   {:pre [(or (is-document? elm) (is-element? elm))]}
-  (.className (inner-instance-of elm)))
+  (.className elm))
 
 (defn get-element-by-id
   "Get element by id from current element."
   [elm, ^String id]
   {:pre [(or (is-document? elm) (is-element? elm))]}
-  (let [element  (.getElementById (inner-instance-of elm) id)]
-    (make-element element)))
+  (.getElementById elm id))
 
 (defn get-elements-by-class
   "Get elements by class name from current element."
   [elm, ^String clsname]
   {:pre [(or (is-document? elm) (is-element? elm))]}
-  (let [element  (.getElementsByClass (inner-instance-of elm) clsname)]
-    (make-collection element)))
+  (.getElementsByClass elm clsname))
 
 (defn has-text?
   "Test if current element has any text node and not whitespace."
@@ -92,32 +83,30 @@
            (is-document? elm)
            (is-element? elm)
            (is-collection? elm))]}
-  (.hasText (inner-instance-of elm)))
+  (.hasText elm))
 
 (defn size
   "Get elements collection size"
   [elm]
   {:pre [(is-collection? elm)]}
-  (.size (inner-instance-of elm)))
+  (.size elm))
 
 (defn as-vector
   "Get collection as clojure vector of elements"
   [elm]
   {:pre [(is-collection? elm)]}
-  (let [instance (inner-instance-of elm)
-        result (atom [])]
-    (dotimes [n (.size instance)]
-      (let [item (.get instance n)]
+  (let [result (atom [])]
+    (dotimes [n (.size elm)]
+      (let [item (.get elm n)]
         (swap! result conj item)))
-    (vec (map make-element @result))))
+    (vec @result)))
 
 (defn attributes
-  "Get attributes map from current element."
+  "Get attributes from current element as clojure map."
   [elm]
   {:pre [(or (is-document? elm) (is-element? elm))]}
-  (let [inner       (inner-instance-of elm)
-        inner-attrs (-> inner .attributes .asList)
-        num-attrs   (-> inner .attributes .size)
+  (let [inner-attrs (-> elm .attributes .asList)
+        num-attrs   (-> elm .attributes .size)
         final-attrs (atom {})]
     (dotimes [n num-attrs]
       (let [attribute (.get inner-attrs n)
@@ -130,4 +119,4 @@
   "Get a first element from one collection."
   [elm]
   {:pre [(is-collection? elm)]}
-  (make-collection (.first (inner-instance-of elm))))
+  (.first elm))

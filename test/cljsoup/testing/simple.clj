@@ -16,7 +16,7 @@
   (testing "Testing from-string and conditionals"
     (let [doc (from-string html-data)]
       (is (is-document? doc))
-      (is (not (is-element? doc)))))
+      (is (is-element? doc))))
 
   (testing "Testing from-string with custom parser"
     (let [parser  (Parser/htmlParser)

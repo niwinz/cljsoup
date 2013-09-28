@@ -1,30 +1,21 @@
-(ns cljsoup.util)
+(ns cljsoup.util
+  (:import (org.jsoup.parser Parser)
+           (org.jsoup.nodes Element Document)
+           (org.jsoup.select Elements)))
 
 ;; # Private util methods
 
-(defn make-type [doc-type instance]
-    {:inner instance :type doc-type})
+(defn is-document?
+  "Check if a current node is a document instance."
+  [node]
+  (instance? Document node))
 
-(defn make-document [instance]
-  (make-type :document instance))
+(defn is-element?
+  "Check if a current node is a element instance."
+  [node]
+  (instance? Element node))
 
-(defn make-element [instance]
-  (make-type :element instance))
-
-(defn make-collection [instance]
-  (make-type :collection instance))
-
-(defn is-type? [doc-type type-instance]
-    (= (:type type-instance) doc-type))
-
-(defn inner-instance-of [elm]
-    (:inner elm))
-
-(defn type-of [elm]
-    (:type elm))
-
-;; FIXME: update metadata for add docstring
-;; for each method
-(def is-document? (partial is-type? :document))
-(def is-element? (partial is-type? :element))
-(def is-collection? (partial is-type? :collection))
+(defn is-collection?
+  "Check if a current node is a elements instance."
+  [node]
+  (instance? Elements node))
